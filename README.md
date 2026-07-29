@@ -1,45 +1,54 @@
-# Criação do Agente de IA para a empresa Soluções LOGICAR
+Criação do Agente de IA - Soluções Logicar 🚚
 
-Challenge da **Alura** em parceria com a **Oracle** - para criar um Agente Inteligente,  que transforma documentos técnicos em conhecimento estruturado por meio de classificação temática, extração de palavras-chave e técnicas de Inteligência Artificial.
+Challenge da **Alura** em parceria com a **Oracle**(ONE) para a criação de um Agente Inteligente utilizando a técnica de RAG (Retrieval-Augmented Generation). 
 
-![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)
-![Google Gemini](https://img.shields.io/badge/Google%20Gemini-1.0%20Pro-orange.svg)
-![Colab](https://img.shields.io/badge/Google%20Colab-Suportado-yellow.svg)
-![Status](https://img.shields.io/badge/Status-Funcionando-brightgreen.svg)
+O projeto se trata de uma empresa ficticia de serviços de entrega e aluguel de carros e transforma os manuais de logística e tabelas de aluguel de carros em um assistente interativo capaz de responder consultas em tempo real.
 
-## 🏆 Desafio
+![alt text](https://img.shields.io/badge/Python-3.9+-blue.svg)
 
-1. Criar um agente de IA
-2. Processar documentos (PDF/CSV)
-3. Fazer deploy na Oracle Cloud (OCI)
+![alt text](https://img.shields.io/badge/Google%20Gemini-1.5%20Flash-orange.svg)
 
-## 📌 Sobre o Projeto
+![alt text](https://img.shields.io/badge/Framework-LangChain-green.svg)
 
-Um **Agente Inteligente** capaz de analisar documentos PDF e responder perguntas utilizando :
+![alt text](https://img.shields.io/badge/Cloud-OCI-red.svg)
 
-- 🧠 **Google Gemini Pro** para processamento de linguagem natural
-- 📄 **PyPDF2** para extração de texto de documentos
-- ☁️ **Google Colab** como ambiente de desenvolvimento
-- 🚀 **OCI** para deploy na nuvem
+![alt text](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow.svg)
 
+🏆 Desafio
+Desenvolver um sistema que entenda documentos específicos (PDF/CSV).
+Implementar a arquitetura RAG para evitar "alucinações" da IA.
+Criar uma interface amigável com Streamlit.
+Realizar o deploy em uma instância na Oracle Cloud Infrastructure (OCI).
 
-## 🎯 Objetivo
-Facilitar a consulta e análise de documentos complexos, permitindo que colaboradores obtenham respostas rápidas e precisas em linguagem natural.
+📌 Sobre a Soluções Logicar
+O agente foi treinado com uma base de dados fictícia de uma empresa que une logística de transporte e aluguel de veículos.
+Contexto: Regras de frete, modelos de carros (HB20, Corolla, Compass), políticas de atraso e manutenção.
 
+⚙️ Funcionalidades Técnicas
+📥 Processamento e Memória
+Extração de Dados: Uso da biblioteca pypdf para leitura de documentos técnicos.
+Fragmentação (Chunking): Divisão de textos via RecursiveCharacterTextSplitter para otimizar a busca.
+Banco de Dados Vetorial: Uso do ChromaDB para armazenamento e recuperação eficiente de informações.
 
-## 💡 Solução Proposta
+🧠 Inteligência Artificial (RAG)
+Modelo de Chat: gemini-1.5-flash-latest (alta velocidade e precisão).
+Embeddings: models/gemini-embedding-2 para representação numérica do conhecimento.
+Framework: LangChain para orquestração do fluxo entre o PDF e a IA.
 
-A solução recebe documentos técnicos em PDF (como relatórios de riscos a direitos humanos) e utiliza **técnicas avançadas de Inteligência Artificial** (Google Gemini) para analisar o conteúdo e retornar **informações estruturadas e respostas em linguagem natural**.
+🚀 Interface e Deploy
+Interface: Desenvolvida em Streamlit para um chat fluido e intuitivo.
+Nuvem: Hospedado na Oracle Cloud (OCI) utilizando instâncias de computação (Virtual Machine).
 
-## ⚙️ Funcionalidades Técnicas
+🛠️ Tecnologias Utilizadas
+Python (Linguagem base)
+LangChain (Orquestrador da IA)
+Google Gemini API (Cérebro do agente)
+ChromaDB (Banco de dados de vetores)
+Streamlit (Interface Web)
+Oracle Cloud (OCI) (Infraestrutura de nuvem)
 
-### 📥 Processamento de Documentos
-- **Upload de PDFs** via Google Colab
-- **Extração automática** de texto com PyPDF2
-- **Limpeza e preparação** do texto para análise
-
-### 🧠 Inteligência Artificial
-- **Modelo:** Google Gemini Pro (via API)
-- **Técnica:** RAG (Retrieval-Augmented Generation)
-- **Contexto:** Os documentos são usados como base de conhecimento
-- **Personalização:** O agente responde APENAS com base no documento fornecido
+📖 Como Rodar o Projeto
+Clone este repositório.
+Instale as dependências: pip install -r requirements.txt.
+Adicione sua GEMINI_API_KEY nas variáveis de ambiente.
+Execute o comando: streamlit run app.py.
