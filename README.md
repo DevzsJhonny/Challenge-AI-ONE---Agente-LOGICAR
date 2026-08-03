@@ -7,8 +7,9 @@ O projeto trata-se de uma empresa fictícia de serviços de entrega e aluguel de
 ![alt text](https://img.shields.io/badge/Python-3.9+-blue.svg) 
 ![alt text](https://img.shields.io/badge/Google%20Gemini-1.5%20Flash-orange.svg)
 ![alt text](https://img.shields.io/badge/Framework-LangChain-green.svg)
-![alt text](https://img.shields.io/badge/Cloud-OCI-red.svg)
 ![alt text](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow.svg)
+
+link da aplicação:
 
  <h2>🏆 Desafio </h2>
 
