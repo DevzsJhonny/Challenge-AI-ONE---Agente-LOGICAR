@@ -68,7 +68,7 @@ with st.sidebar:
   
     if st.button("🗑️ Limpar Conversa"):
         st.session_state.messages = [
-            {"role": "assistant", "content": "Olá! Sou o assistente da **Soluções Logicar**. Posso ajudar com entregas e/ou aluguéis de frotas de veículos."}
+            {"role": "assistant", "content": "Olá! Sou o assistente da **Soluções Logicar**. Posso responder dúvidas sobre logística, frota e procedimentos internos. Como posso ajudar?"}
         ]
         st.rerun()
 
