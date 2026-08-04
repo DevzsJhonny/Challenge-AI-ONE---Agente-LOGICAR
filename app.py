@@ -64,13 +64,6 @@ with st.sidebar:
     - 🏍️ Entregas Rápidas
     """)
     
-    st.divider()
-  
-    if st.button("🗑️ Limpar Conversa"):
-        st.session_state.messages = [
-            {"role": "assistant", "content": "Olá! Sou o assistente da **Soluções Logicar**. Posso responder dúvidas sobre logística, frota e procedimentos internos. Como posso ajudar?"}
-        ]
-        st.rerun()
 
 # --- 4. INICIALIZAÇÃO DO AGENTE (Lógica RAG) ---
 if api_key:
@@ -141,6 +134,14 @@ if api_key:
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
+
+    col1, col2 = st.columns([5, 1]) 
+    with col2:
+        if st.button("🗑️ Limpar"):
+            st.session_state.messages = [
+                {"role": "assistant", "content": "Olá! Sou o assistente da **Soluções Logicar**. Posso responder dúvidas sobre logística, frota e procedimentos internos. Como posso ajudar?"}
+            ]
+            st.rerun()
 
     if prompt := st.chat_input("Pergunte sobre os veículos, fretes, serviços ou políticas nos manuais..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
