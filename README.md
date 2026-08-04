@@ -12,6 +12,8 @@ O projeto apresenta uma empresa fictícia de serviços de entrega e locação de
 ## 🚀 Link da Aplicação
 [Clique aqui para acessar o Agente Soluções Logicar](https://challenge-alura-agente-logicar-solucoes-logisticas-e-automoveis.streamlit.app/)
 
+Vídeo: https://www.youtube.com/watch?v=avSBAOlgrJU
+
 ## 🏆 Desafio 
 - Desenvolver um sistema que interprete documentos específicos (PDF/CSV).
 - Implementar a arquitetura RAG para evitar "alucinações" da IA.
