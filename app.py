@@ -35,7 +35,7 @@ api_key = os.getenv("GEMINI_API_KEY")
 # --- 3. SIDEBAR  ---
 with st.sidebar:
     st.markdown('<div class="sidebar-title">🚚 Soluções Logicar</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sidebar-sub">Assistente Corporativo Logístico</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-sub">Assistente Logístico</div>', unsafe_allow_html=True)
     st.divider()
     
     st.subheader("📍 Áreas de Atuação")
@@ -47,10 +47,7 @@ with st.sidebar:
     """)
     
     st.divider()
-    st.subheader("⚙️ Tecnologias")
-    st.markdown("- Gemini 1.5 Flash\n- LangChain RAG\n- ChromaDB\n- Streamlit")
-    
-    st.divider()
+  
     if st.button("🗑️ Limpar Conversa"):
         st.session_state.messages = [
             {"role": "assistant", "content": "Olá! Sou o assistente da **Soluções Logicar**. Como posso ajudar com fretes, aluguéis ou políticas de uso hoje?"}
