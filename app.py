@@ -15,17 +15,36 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Injeção de CSS para layout profissional
+# Injeção de CSS para layout Profissional
 st.markdown("""
 <style>
+    /* Cores: Azul Marinho (#1B263B), Cinza (#F0F2F6), Laranja Logística (#F39C12) */
     .block-container { padding-top: 2rem; max-width: 1100px; }
-    section[data-testid="stSidebar"] { background-color: #1A102C; color: white; }
-    .sidebar-title { font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 0px; }
-    .sidebar-sub { color: #B9B5C8; font-size: 0.9rem; margin-bottom: 20px; }
-    .stButton>button {
-        width: 100%; border-radius: 12px; background-color: #7C3AED; color: white; font-weight: 600; border: none;
+    
+    /* Sidebar Escura Corporativa */
+    section[data-testid="stSidebar"] { 
+        background-color: #0D1B2A; 
+        color: white; 
     }
-    .stButton>button:hover { background-color: #8B5CF6; color: white; }
+    
+    /* Títulos da Sidebar */
+    .sidebar-title { font-size: 1.5rem; font-weight: 700; color: #E0E1DD; margin-bottom: 0px; }
+    .sidebar-sub { color: #778DA9; font-size: 0.9rem; margin-bottom: 20px; }
+    
+    /* Botões Modernos em Azul/Slate */
+    .stButton>button {
+        width: 100%; border-radius: 8px; 
+        background-color: #415A77; 
+        color: white; border: none;
+        transition: 0.3s;
+    }
+    .stButton>button:hover { 
+        background-color: #F39C12; /* Laranja ao passar o mouse para destaque */
+        color: white; 
+    }
+    
+    /* Ajuste de cor do Divider na lateral */
+    hr { border-color: #415A77; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -38,19 +57,18 @@ with st.sidebar:
     st.markdown('<div class="sidebar-sub">Assistente Logístico</div>', unsafe_allow_html=True)
     st.divider()
     
-    st.subheader("📍 Áreas de Atuação")
+    st.subheader("Atuação Especializada em:")
     st.markdown("""
     - 📦 Logística Urbana
     - 🚗 Aluguel de Frota
     - 🏍️ Entregas Rápidas
-    - 🛡️ Regras e Requisitos para aluguel de automóveis
     """)
     
     st.divider()
   
     if st.button("🗑️ Limpar Conversa"):
         st.session_state.messages = [
-            {"role": "assistant", "content": "Olá! Sou o assistente da **Soluções Logicar**. Como posso ajudar com fretes, aluguéis ou políticas de uso hoje?"}
+            {"role": "assistant", "content": "Olá! Sou o assistente da **Soluções Logicar**. Posso ajudar com entregas e/ou aluguéis de frotas de veículos."}
         ]
         st.rerun()
 
