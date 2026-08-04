@@ -9,7 +9,7 @@ O projeto trata-se de uma empresa fictícia de serviços de entrega e aluguel de
 ![alt text](https://img.shields.io/badge/Framework-LangChain-green.svg)
 ![alt text](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow.svg)
 
-link da aplicação:
+link da aplicação: https://challenge-alura-agente-logicar-solucoes-logisticas-e-automoveis.streamlit.app/#solucoes-logicar
 
  <h2>🏆 Desafio </h2>
 
