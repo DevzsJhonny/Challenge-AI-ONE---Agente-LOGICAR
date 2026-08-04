@@ -5,79 +5,142 @@ from langchain_community.vectorstores import Chroma
 from langchain_classic.chains import RetrievalQA
 from langchain_core.prompts import PromptTemplate
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFDirectoryLoader
 
-# 1. Configuração Visual
-st.set_page_config(page_title="Soluções Logicar", page_icon="🚚")
-st.title("🚚 Soluções Logicar")
-st.markdown("Assistente Virtual de Logística e Aluguel de Automóveis")
+# --- 1. CONFIGURAÇÃO DA PÁGINA E ESTILO 
+st.set_page_config(
+    page_title="Soluções Logicar",
+    page_icon="🚚",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 
-# 2. PEGAR A CHAVE AUTOMATICAMENTE
-# Ele tenta pegar da variável de ambiente que definimos no Colab
+# Injeção de CSS para layout profissional
+st.markdown("""
+<style>
+    .block-container { padding-top: 2rem; max-width: 1100px; }
+    section[data-testid="stSidebar"] { background-color: #1A102C; color: white; }
+    .sidebar-title { font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 0px; }
+    .sidebar-sub { color: #B9B5C8; font-size: 0.9rem; margin-bottom: 20px; }
+    .stButton>button {
+        width: 100%; border-radius: 12px; background-color: #7C3AED; color: white; font-weight: 600; border: none;
+    }
+    .stButton>button:hover { background-color: #8B5CF6; color: white; }
+</style>
+""", unsafe_allow_html=True)
+
+# --- 2. CONFIGURAÇÃO DA CHAVE API ---
 api_key = os.getenv("GEMINI_API_KEY")
 
+# --- 3. SIDEBAR  ---
+with st.sidebar:
+    st.markdown('<div class="sidebar-title">🚚 Soluções Logicar</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-sub">Assistente Corporativo Logístico</div>', unsafe_allow_html=True)
+    st.divider()
+    
+    st.subheader("📍 Áreas de Atuação")
+    st.markdown("""
+    - 📦 Logística Urbana
+    - 🚗 Aluguel de Frota
+    - 🏍️ Entregas Rápidas
+    - 🛡️ Regras e Requisitos para aluguel de automóveis
+    """)
+    
+    st.divider()
+    st.subheader("⚙️ Tecnologias")
+    st.markdown("- Gemini 1.5 Flash\n- LangChain RAG\n- ChromaDB\n- Streamlit")
+    
+    st.divider()
+    if st.button("🗑️ Limpar Conversa"):
+        st.session_state.messages = [
+            {"role": "assistant", "content": "Olá! Sou o assistente da **Soluções Logicar**. Como posso ajudar com fretes, aluguéis ou políticas de uso hoje?"}
+        ]
+        st.rerun()
+
+# --- 4. INICIALIZAÇÃO DO AGENTE (Lógica RAG) ---
 if api_key:
     os.environ["GOOGLE_API_KEY"] = api_key
 
     @st.cache_resource
     def inicializar_agente(key):
-        loader = PyPDFLoader("dados_logicar.pdf")
+        # Carrega todos os PDFs da pasta "documentos"
+        if not os.path.exists("documentos"):
+            os.makedirs("documentos") # Cria a pasta se não existir
+            
+        loader = PyPDFDirectoryLoader("documentos")
         documentos = loader.load()
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+        
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
         chunks = text_splitter.split_documents(documentos)
 
-        embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/gemini-embedding-2",
-            google_api_key=key
-        )
+        embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-2", google_api_key=key)
         vectorstore = Chroma.from_documents(documents=chunks, embedding=embeddings)
 
-        llm = ChatGoogleGenerativeAI(
-            model="gemini-flash-latest",
-            google_api_key=key,
-            temperature=0
-        )
+        llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", google_api_key=key, temperature=0)
 
-        template_logicar = """
-        Você é o assistente virtual oficial da Soluções Logicar.
-        Use APENAS os trechos do documento fornecidos abaixo para responder à pergunta.
-        Se a informação não estiver no texto, responda: "Sinto muito, mas não encontrei essa informação no manual da Soluções Logicar."
+        # PROMPT TEMPLATE
+        template_final = """
+        Você é o assistente virtual oficial da Soluções Logicar. 
+        Sua função é responder dúvidas dos usuários utilizando UNICAMENTE as informações presentes nos manuais fornecidos.
 
-        CONTEXTO:
-        {context}
+        =========================
+        REGRAS DE CONDUTA
+        =========================
+        1. Utilize apenas o contexto recuperado. Nunca invente informações.
+        2. Explique com suas próprias palavras de forma clara, objetiva e cordial.
+        3. Use listas ou parágrafos curtos para facilitar a leitura.
+        4. Introduza respostas baseadas em regras com: "Conforme a política da empresa...", "Segundo as diretrizes internas..." ou "De acordo com o procedimento da Soluções Logicar...".
+        5. Nunca mencione nomes de arquivos (.pdf, etc) ou detalhes técnicos.
+        6. Se a informação não existir, responda exatamente: "Não encontrei essa informação na documentação da empresa."
+        7. Se a pergunta for fora do tema, diga: "No momento, posso ajudar apenas com informações presentes na documentação interna da Soluções LOGICAR. Sinta-se à vontade para perguntar sobre aluguel de frotas, fretes de entrega ou detalhes dos nossos serviços."
 
-        PERGUNTA:
-        {question}
+        =========================
+        DIRETRIZES ESPECÍFICAS LOGICAR
+        =========================
+        - CNH: Exigir sempre CNH DEFINITIVA. Proibido PPD.
+        - MANUTENÇÃO: Revisão a cada 10.000km ou vistoria mensal.
+        - ENTREGAS: O frete é baseado exclusivamente na quilometragem (KM).
+        - ESTADO DO VEÍCULO: Devolução sem avarias; danos são cobrados.
 
-        RESPOSTA:"""
+        CONTEXTO: {context}
+        PERGUNTA: {question}
+        RESPOSTA DO ASSISTENTE:"""
 
-        PROMPT = PromptTemplate(template=template_logicar, input_variables=["context", "question"])
+        PROMPT = PromptTemplate(template=template_final, input_variables=["context", "question"])
 
         return RetrievalQA.from_chain_type(
             llm=llm,
             chain_type="stuff",
-            retriever=vectorstore.as_retriever(),
+            retriever=vectorstore.as_retriever(search_kwargs={"k": 3}),
             chain_type_kwargs={"prompt": PROMPT}
         )
 
-    # O agente já inicia com a chave automática
     agente_logicar = inicializar_agente(api_key)
 
-    # 3. Interface de Chat
+    # --- 5. INTERFACE DE CHAT ---
     if "messages" not in st.session_state:
-        st.session_state.messages = []
+        st.session_state.messages = [
+            {"role": "assistant", "content": "Olá! Sou o assistente da **Soluções Logicar**. Posso responder dúvidas sobre logística, frota e procedimentos internos. Como posso ajudar?"}
+        ]
 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    if prompt := st.chat_input("Como posso ajudar?"):
+    if prompt := st.chat_input("Pergunte sobre os veículos, fretes, serviços ou políticas nos manuais..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
 
         with st.chat_message("assistant"):
-            with st.spinner("Consultando manual..."):
-                resultado = agente_logicar.invoke(prompt)
-                st.markdown(resultado['result'])
-                st.session_state.messages.append({"role": "assistant", "content": resultado['result']})
+            with st.spinner("Analisando documentação interna..."):
+                try:
+                    resultado = agente_logicar.invoke(prompt)
+                    resposta = resultado['result']
+                except Exception as e:
+                    resposta = "Desculpe, ocorreu um erro ao consultar os manuais. Tente novamente."
+                
+                st.markdown(resposta)
+                st.session_state.messages.append({"role": "assistant", "content": resposta})
+else:
+    st.error("Chave API não configurada! Verifique as Secrets do ambiente.")
